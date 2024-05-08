@@ -1,4 +1,4 @@
-## GamePk - 1vs1 Fighting Game:
+## 1. KingDom - 1vs1 Fighting Game:
 
 This project is a Clone of the Street Fighter Game. It has been developed in Python programming language, using the Pygame library.
 
@@ -54,4 +54,11 @@ Link Latex:
 
 ## 7. Support:
 
-If you encounter any issues while playing GamePk or have any questions, please contact us at luongcotu@gamepk.com or visit our official website at www.gamepk.com for more information.
+If you encounter any issues while playing GamePk or have any questions, please contact us at luongcotu@game.com or visit our official website at www.game.com for more information.
+
+## 8. Member:
+
+1. Nguyễn Quang Nhật
+2. Nguyễn Văn Lương
+3. Nguyễn Phan Minh Nhật
+4. Trần Phú Luân
