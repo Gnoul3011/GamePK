@@ -21,7 +21,7 @@ Embark on a retro gaming adventure with this 2D Pixel Side-Scroller! Play as the
 1. Clone the git repo
 
 ```
-https://github.com/russs123/brawler_tut.git
+https://github.com/Gnoul3011/GamePK.git
 ```
 
 2. Open project folder
@@ -49,6 +49,7 @@ https://user-images.githubusercontent.com/15172744/190894691-c52ac22d-b76c-4890-
 
 You can access the demo version of GamePk at the following link:
 ` Link Demo`
+
 Link Latex:
 [Link Latex] (https://www.overleaf.com/project/663b040efcffc42f45765145)
 
