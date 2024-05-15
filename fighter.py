@@ -104,3 +104,75 @@ class Fighter():
         self.rect.y += dy
         
     #handle animation updates
+    def update(self):
+        #check what action the player is performing
+        if self.mana >=100:
+            self.mana = 100
+        if self.health >= 100:
+            self.health = 100
+        if self.health <=0:
+            self.health = 0
+            self.alive = False
+            self.update_action(6) #6: chet
+        elif self.hit == True:
+            self.update_action(5) #5: bi danh
+        elif self.attacking == True:
+            if self.attack_type == 1:
+                self.update_action(3) #3: tan cong 1
+            elif self.attack_type ==2:
+                self.update_action(4) #4: tan cong 2
+        elif self.jump == True:
+            self.update_action(2) #2: nhay
+        elif self.running == True:
+            self.update_action(1) #1: chay
+        else:
+            self.update_action(0) #0: dung im
+            
+        animation_cooldown = 50
+        #update image
+        self.image = self.animation_list[self.action][self.frame_index] 
+        #check if enough time has passed since the last update
+        if pygame.time.get_ticks() - self.update_time > animation_cooldown:
+            self.frame_index += 1
+            self.update_time = pygame.time.get_ticks()
+        #check if the animation has finished
+        if self.frame_index >= len(self.animation_list[self.action]):
+            #if the player is dead then end the animation
+            if self.alive == False:
+                self.frame_index = len(self.animation_list[self.action]) - 1
+            else:
+                self.frame_index = 0
+                #check if an attack was executed
+                if self.action == 3 or self.action ==4:
+                    self.attacking = False
+                    self.attack_cooldown = 20 #thoi gian ra chieu
+                #check if damage was taken
+                if self.action == 5:
+                    self.hit = False
+                    #if the player was in the middle of an attack, then the attack is stopped
+                    self.attacking = False
+                    self.attack_cooldown = 20
+    
+    def attack(self, target):
+        random_health = random.randint(10, 30)
+        if self.attack_cooldown == 0:
+            #execute attack
+            self.attacking = True
+            self.attack_sound.play()
+            attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height) #vung danh
+            if attacking_rect.colliderect(target.rect):
+                target.health -= 10
+                self.mana += 20
+                if self.mana == 100:
+                    self.health += random_health
+                    self.mana = 0
+                target.hit = True
+            # pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
+        
+    def update_action(self, new_action):
+        #check if the new action is different to the previous one
+        if new_action != self.action:
+            self.action = new_action
+            #update the animation from django.conf import settings
+            self.frame_index = 0
+            self.update_time = pygame.time.get_ticks()
