@@ -148,3 +148,102 @@ start_button = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 3, start_img)
 exit_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2, exit_img)
 restart_button = Button(SCREEN_WIDTH // 2 - 165, SCREEN_HEIGHT // 2 - 50, restart_img)
 main_menu_button = Button(SCREEN_WIDTH // 2 + 65, SCREEN_HEIGHT // 2 - 50, main_menu_img)
+
+# game loop 
+run = True
+while run:
+    
+    clock.tick(FPS)
+    
+    #draw background
+    draw_bg(pygame.transform.scale(bg_image_main, (SCREEN_WIDTH,SCREEN_HEIGHT)))
+    
+    if main_menu == True:
+        if start_button.draw():
+            main_menu = False
+        if exit_button.draw():
+            run = False
+    else:
+    
+        #show player status
+        draw_health_bar(fighter_1.health, 20, 20)
+        draw_text("HP: " + str(fighter_1.health), score_font, WHITE, 180, 15)
+        draw_health_bar(fighter_2.health, 580, 20)
+        draw_text("HP: " + str(fighter_2.health), score_font, WHITE, 740, 15)
+        draw_mana_bar(fighter_1.mana, 20, 55)
+        draw_mana_bar(fighter_2.mana, 580, 55)
+        draw_text("P1: " + str(score[0]), score_font, RED, 20, 60)
+        draw_text("P2: " + str(score[1]), score_font, RED, 580, 60)
+        
+        #update countdown
+        if intro_count <= 0:
+            #move fighters
+            fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, round_over)
+            fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, round_over)
+        else:
+            #display count timer
+            draw_text(str(intro_count), count_font, RED, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 50)
+            #update count timer
+            if (pygame.time.get_ticks() - last_count_update) >= 1000:
+                intro_count -= 1
+                last_count_update = pygame.time.get_ticks()
+
+        #update fighters lam cho chuyen dong animation
+        fighter_1.update()
+        fighter_2.update()
+        
+        #draw fighters
+        fighter_1.draw(screen)
+        fighter_2.draw(screen)
+        
+        #check for player defeat
+        WINNING_SCORE = 3
+        game_over = False
+        if round_over == False:
+            if fighter_1.alive ==False:
+                score[1] += 1
+                round_over = True
+                round_over_time = pygame.time.get_ticks()
+            elif fighter_2.alive ==False:
+                score[0] += 1
+                round_over = True
+                round_over_time = pygame.time.get_ticks()
+        elif score[0] == WINNING_SCORE:
+            screen.blit(P1Victory_img, (360, 150))
+            round_over = True
+            if restart_button.draw():
+                fighter_1.reset(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
+                fighter_2.reset(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
+                score = [0, 0]
+                round_over = False
+        elif score[1] == WINNING_SCORE:
+            screen.blit(P2Victory_img, (360, 150))     
+            round_over = True
+            if restart_button.draw():
+                fighter_1.reset(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
+                fighter_2.reset(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
+                score = [0, 0]
+                round_over = False
+            if main_menu_button.draw():
+                main_menu = True
+                score = [0, 0]
+                round_over = False
+        else:
+            #display victory image
+            # screen.blit(victory_img, (360, 150))
+            if pygame.time.get_ticks() - round_over_time >ROUND_OVER_COOLDOWN:
+                round_over = False
+                intro_count = 0
+                fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
+                fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx) 
+
+    #event handler
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+                run = False
+                
+    #update display
+    pygame.display.update()
+                
+#exit pygame
+pygame.quit()
