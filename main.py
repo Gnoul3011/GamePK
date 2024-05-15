@@ -100,6 +100,8 @@ K_O_img = pygame.image.load("assets/images/icons/K.O.png").convert_alpha()
 #define number of steps in each animation
 WARRIOR_ANIMATION_STEPS = [10, 8, 1, 7, 7, 3, 7]
 WIZARD_ANIMATION_STEPS = [8, 8, 1, 8, 8, 3, 7]
+MARTIALHERO_ANIMATION_STEPS = [8, 8, 2, 6, 6, 4, 6]
+KNIGHT_ANIMATION_STEPS = [11, 8, 3, 7, 7, 4, 11]  
 
 #define font
 count_font = pygame.font.Font("assets/fonts/turok.ttf", 50)
