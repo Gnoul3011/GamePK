@@ -68,7 +68,17 @@ player_selection = 0
 
 #load background image
 title = pygame.image.load("assets/images/background/NameGame.png").convert_alpha()
-bg_image_main = pygame.image.load("assets/images/background/background9.jpg").convert_alpha()   
+bg_image_main = pygame.image.load("assets/images/background/background9.jpg").convert_alpha()  
+
+choose_character_1 = pygame.image.load("assets/images/background/character1.png").convert_alpha()
+choose_character_1 = pygame.transform.scale(choose_character_1, (275, 275))
+choose_character_2 = pygame.image.load("assets/images/background/character2.png").convert_alpha()
+choose_character_2 = pygame.transform.scale(choose_character_2, (250, 250))
+choose_character_3 = pygame.image.load("assets/images/background/character3.png").convert_alpha()
+choose_character_3 = pygame.transform.scale(choose_character_3, (200, 200))
+choose_character_4 = pygame.image.load("assets/images/background/character4.png").convert_alpha()
+choose_character_4 = pygame.transform.scale(choose_character_4, (250, 250))  
+
 bg_image = pygame.image.load("assets/images/background/background.jpg").convert_alpha()
 start_img = pygame.image.load('assets/images/background/start.png').convert_alpha()
 exit_img = pygame.image.load('assets/images/background/exit.png').convert_alpha()
@@ -79,6 +89,8 @@ main_menu_img = pygame.image.load('assets/images/background/main_menu.png').conv
 #load spritesheets
 warrior_sheet = pygame.image.load("assets/images/warrior/Sprites/warrior.png").convert_alpha()
 wizard_sheet = pygame.image.load("assets/images/wizard/Sprites/wizard.png").convert_alpha()
+martialhero_sheet = pygame.image.load("assets/images/martialhero/Sprites/martialhero.png").convert_alpha()
+knight_sheet = pygame.image.load("assets/images/knight/Sprites/knight.png").convert_alpha()
 
 #load vitory image
 P1Victory_img = pygame.image.load("assets/images/icons/p1win.png").convert_alpha()
