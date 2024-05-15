@@ -127,7 +127,75 @@ def draw_mana_bar(mana, x, y):
     ratio = mana / 100
     pygame.draw.rect(screen, WHITE, (x - 2, y - 2, 204, 8))
     pygame.draw.rect(screen, BLUE, (x, y, 200 * ratio, 5))
-    
+
+def character_selection_screen():
+    global player_selection
+    selected_character = None
+    while selected_character is None:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return "exit"
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = event.pos
+                if warrior_button_rect.collidepoint(x, y):
+                    selected_character = "Warrior"
+                    player_selection = 1
+                elif wizard_button_rect.collidepoint(x, y):
+                    selected_character = "Wizard"
+                    player_selection = 2
+                elif martialhero_button_rect.collidepoint(x, y):
+                    selected_character = "Hero"
+                    player_selection = 3
+                elif knight_button_rect.collidepoint(x, y):
+                    selected_character = "Knight"
+                    player_selection = 4
+
+        if player_selection == 1:
+            screen.fill((0, 0, 0), (SCREEN_WIDTH / 2 - 170, 50, 340, 50))
+            draw_text("Select Player "+ str(player_selection), count_font, RED, SCREEN_WIDTH / 2 - 170, 50)
+        elif player_selection == 2:
+            screen.fill((0, 0, 0), (SCREEN_WIDTH / 2 - 170, 50, 340, 70))
+            draw_text("Select Player "+ str(player_selection), count_font, RED, SCREEN_WIDTH / 2 - 170, 50)
+        else:
+            draw_text("Select Player ", count_font, RED, SCREEN_WIDTH / 2 - 170, 50)
+
+       
+        warrior_button_rect = pygame.Rect(50, 100, 200, 200)
+        screen.blit(choose_character_1, warrior_button_rect)
+        if player_selection == 1:
+            draw_text("Warrior", count_font, RED, 120, 270)
+        else:
+            draw_text("Warrior", count_font, WHITE, 120, 270)
+
+
+        wizard_button_rect = pygame.Rect(580, 50, 200, 200)
+        screen.blit(choose_character_2, wizard_button_rect)
+        if player_selection == 2:
+            draw_text("Wizard", count_font, RED, 620, 270)
+        else:
+            draw_text("Wizard", count_font, WHITE, 620, 270)
+        
+        martialhero_button_rect = pygame.Rect(580, 350, 200, 200)
+        screen.blit(choose_character_3, martialhero_button_rect)
+        if player_selection == 3:
+            draw_text("Hero", count_font, RED, 620, 520)
+        else:
+            draw_text("Hero", count_font, WHITE, 620, 520)
+        
+        knight_button_rect = pygame.Rect(50, 350, 200, 200)
+        screen.blit(choose_character_4, knight_button_rect)
+        if player_selection == 4:
+            draw_text("Knight", count_font, RED, 120, 520)
+        else:
+            draw_text("Knight", count_font, WHITE, 120, 520)
+          
+
+        pygame.display.update()
+        clock.tick(FPS)
+
+    return selected_character  
+
+
 class Button():
     def __init__(self, x, y, image):
         self.image = image
