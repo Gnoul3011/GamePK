@@ -55,3 +55,38 @@ P1_win_fx = pygame.mixer.Sound("assets/audio/player-1-wins.mp3")
 P1_win_fx.set_volume(0.25)
 P2_win_fx = pygame.mixer.Sound("assets/audio/player-2-wins.mp3")
 P2_win_fx.set_volume(0.25)
+
+# Các biến menu và map
+main_menu = True
+map_menu = False
+map_selected = False
+sound_played = False
+map_selected_index = None  # Thêm biến lưu chỉ số map được chọn
+player_selection = 0
+
+#load background image
+title = pygame.image.load("assets/images/background/NameGame.png").convert_alpha()
+bg_image_main = pygame.image.load("assets/images/background/background9.jpg").convert_alpha()   
+bg_image = pygame.image.load("assets/images/background/background.jpg").convert_alpha()
+start_img = pygame.image.load('assets/images/background/start.png').convert_alpha()
+exit_img = pygame.image.load('assets/images/background/exit.png').convert_alpha()
+restart_img = pygame.image.load('assets/images/background/restart.png').convert_alpha()
+main_menu_img = pygame.image.load('assets/images/background/main_menu.png').convert_alpha()
+
+
+#load spritesheets
+warrior_sheet = pygame.image.load("assets/images/warrior/Sprites/warrior.png").convert_alpha()
+wizard_sheet = pygame.image.load("assets/images/wizard/Sprites/wizard.png").convert_alpha()
+
+#load vitory image
+P1Victory_img = pygame.image.load("assets/images/icons/p1win.png").convert_alpha()
+P2Victory_img = pygame.image.load("assets/images/icons/p2win.png").convert_alpha()
+K_O_img = pygame.image.load("assets/images/icons/K.O.png").convert_alpha()
+
+#define number of steps in each animation
+WARRIOR_ANIMATION_STEPS = [10, 8, 1, 7, 7, 3, 7]
+WIZARD_ANIMATION_STEPS = [8, 8, 1, 8, 8, 3, 7]
+
+#define font
+count_font = pygame.font.Font("assets/fonts/turok.ttf", 50)
+score_font = pygame.font.Font("assets/fonts/turok.ttf", 30)
