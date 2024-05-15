@@ -41,6 +41,8 @@ WIZARD_SCALE = 3
 WIZARD_OFFSET = [112, 107]
 WIZARD_DATA = [WIZARD_SIZE, WIZARD_SCALE, WIZARD_OFFSET]
 
+
+
 # Load âm nhạc và âm thanh
 pygame.mixer.music.load("assets/audio/music1.mp3")
 pygame.mixer.music.set_volume(0.5)
@@ -242,12 +244,43 @@ while run:
     #draw background
     draw_bg(pygame.transform.scale(bg_image_main, (SCREEN_WIDTH,SCREEN_HEIGHT)))
     
-    if main_menu == True:
+    if main_menu:
+        title_game.draw()
         if start_button.draw():
             main_menu = False
         if exit_button.draw():
             run = False
-    else:
+
+    elif character_selection:
+        selected_character_p1 = character_selection_screen()
+        if selected_character_p1 == "exit":
+            run = False
+        else:
+            if selected_character_p1 == "Warrior":
+                fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
+            elif selected_character_p1 == "Wizard":
+                fighter_1 = Fighter(1, 200, 310, False, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
+            elif selected_character_p1 == "Hero":
+                fighter_1 = Fighter(1, 200, 310, False, MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, sword_fx)
+            elif selected_character_p1 == "Knight":
+                fighter_1 = Fighter(1, 200, 310, False, KNIGHT_DATA, knight_sheet, KNIGHT_ANIMATION_STEPS, knight_fx)
+
+
+        selected_character_p2 = character_selection_screen()
+        if selected_character_p2 == "exit":
+            run = False
+        else:
+            if selected_character_p2 == "Warrior":
+                fighter_2 = Fighter(2, 700, 310, True, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
+            elif selected_character_p2 == "Wizard":
+                fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
+            elif selected_character_p2 == "Hero":
+                fighter_2 = Fighter(2, 700, 310, True   , MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, sword_fx)
+            elif selected_character_p2 == "Knight":
+                fighter_2 = Fighter(2, 700, 310, True, KNIGHT_DATA, knight_sheet, KNIGHT_ANIMATION_STEPS, knight_fx)
+                
+
+        character_selection = False     
     
         #show player status
         draw_health_bar(fighter_1.health, 20, 20)
