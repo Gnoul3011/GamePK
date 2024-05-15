@@ -90,3 +90,51 @@ WIZARD_ANIMATION_STEPS = [8, 8, 1, 8, 8, 3, 7]
 #define font
 count_font = pygame.font.Font("assets/fonts/turok.ttf", 50)
 score_font = pygame.font.Font("assets/fonts/turok.ttf", 30)
+
+# Hàm vẽ chữ
+def draw_text(text, font, text_col, x, y):
+    img = font.render(text, True, text_col)
+    screen.blit(img, (x, y))
+
+#function for drawing background
+def draw_bg(scaler_bg):
+    screen.blit(scaler_bg,(0, 0))
+    
+# Hàm vẽ thanh máu và mana
+def draw_health_bar(health, x, y):
+    ratio = health / 100
+    pygame.draw.rect(screen, WHITE, (x - 2, y - 2, 404, 34))
+    pygame.draw.rect(screen, RED, (x, y, 400, 30))
+    pygame.draw.rect(screen, GREEN, (x, y, 400 * ratio, 30))
+            
+def draw_mana_bar(mana, x, y):
+    ratio = mana / 100
+    pygame.draw.rect(screen, WHITE, (x - 2, y - 2, 204, 8))
+    pygame.draw.rect(screen, BLUE, (x, y, 200 * ratio, 5))
+    
+class Button():
+    def __init__(self, x, y, image):
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.clicked = False
+        
+    def draw(self):
+        action = False
+        #get mouse position
+        pos = pygame.mouse.get_pos()
+        
+        #check mouse over and clicked conditions
+        if self.rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                action = True
+                self.clicked = True
+                
+        if pygame.mouse.get_pressed()[0] == 0:
+            self.clicked = False
+        
+        #draw button
+        screen.blit(self.image, self.rect)
+        
+        return action
