@@ -13,7 +13,7 @@ pygame.init()
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-pygame.display.set_caption("Game Multiplayer")
+pygame.display.set_caption("KINGDOM")
 
 #set framerate
 clock = pygame.time.Clock()
@@ -226,21 +226,26 @@ def convert_time(t):
         return minutes + ":" + seconds
     
 def redraw_window_io(players, balls, game_time, score):
-    screen.fill((255, 255, 255))  # fill screen white, to clear old frames
-    
-    # draw all the orbs/balls
+    # Load background image and scale it to fit the screen
+    background_image = pygame.image.load("assets/images/background/background_kingdom_io.jpg")  # Thay đổi đường dẫn tới hình ảnh của bạn
+    background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    # Vẽ hình ảnh nền lên màn hình
+    screen.blit(background_image, (0, 0))
+
+    # Vẽ tất cả các quả bóng
     for ball in balls:
         pygame.draw.circle(screen, ball[2], (ball[0], ball[1]), BALL_RADIUS)
 
-    # draw each player in the list
+    # Vẽ mỗi người chơi trong danh sách
     for player in sorted(players, key=lambda x: players[x]["score"]):
         p = players[player]
         pygame.draw.circle(screen, p["color"], (p["x"], p["y"]), PLAYER_RADIUS + round(p["score"]))
-        # render and draw name for each player
+        # Hiển thị và vẽ tên cho mỗi người chơi
         text = NAME_FONT.render(p["name"], 1, (0, 0, 0))
         screen.blit(text, (p["x"] - text.get_width() / 2, p["y"] - text.get_height() / 2))
 
-    # draw scoreboard
+    # Vẽ bảng điểm
     sort_players = list(reversed(sorted(players, key=lambda x: players[x]["score"])))
     title = TIME_FONT.render("Scoreboard", 1, (0, 0, 0))
     start_y = 25
@@ -252,16 +257,17 @@ def redraw_window_io(players, balls, game_time, score):
         text = SCORE_FONT.render(str(count + 1) + ". " + str(players[i]["name"]), 1, (0, 0, 0))
         screen.blit(text, (x, start_y + count * 20))
 
-    # draw time
+    # Hiển thị thời gian
     text = TIME_FONT.render("Time: " + convert_time(game_time), 1, (0, 0, 0))
     screen.blit(text, (10, 10))
-    # draw score
+    # Hiển thị điểm số
     text = TIME_FONT.render("Score: " + str(round(score)), 1, (0, 0, 0))
     screen.blit(text, (10, 15 + text.get_height()))
-    
-def draw_name_input():
+
+def draw_name_input(previous_score=None):
     input_box = pygame.Rect(SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 - 25, 200, 50)
     font = pygame.font.SysFont("comicsans", 30)
+    label_font = pygame.font.SysFont("comicsans", 24)  # Font cho phần text "Your Name"
     color_inactive = pygame.Color('lightskyblue3')
     color_active = pygame.Color('dodgerblue2')
     color = color_inactive
@@ -269,6 +275,8 @@ def draw_name_input():
     text = ''
     done = False
     play_button = pygame.Rect(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 50, 100, 50)
+    
+    bg_image_scaled = pygame.transform.scale(bg_image_main, (SCREEN_WIDTH, SCREEN_HEIGHT))
     
     while not done:
         for event in pygame.event.get():
@@ -293,17 +301,36 @@ def draw_name_input():
                     else:
                         text += event.unicode
 
-        screen.fill((255, 255, 255))
-        txt_surface = font.render(text, True, color)
-        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        # Vẽ nền
+        draw_bg(bg_image_scaled)
+        
+        # Vẽ hộp nhập liệu với màu trắng
+        pygame.draw.rect(screen, (255, 255, 255), input_box)
         pygame.draw.rect(screen, color, input_box, 2)
+        
+        # Vẽ văn bản đã nhập với màu đen
+        txt_surface = font.render(text, True, (0, 0, 0))
+        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        
+        # Vẽ văn bản "Your Name" phía trên hộp nhập liệu
+        label_text = label_font.render("Your Name: ", True, (255, 0, 0))
+        screen.blit(label_text, (SCREEN_WIDTH / 2 - label_text.get_width() / 2, SCREEN_HEIGHT / 2 - 60))
 
+        # Vẽ nút "Play"
         play_text = font.render("Play", True, (0, 0, 0))
-        pygame.draw.rect(screen, (0, 255, 0), play_button)
+        pygame.draw.rect(screen, (255, 0, 0), play_button)
         screen.blit(play_text, (play_button.x + (play_button.width - play_text.get_width()) // 2,
                             play_button.y + (play_button.height - play_text.get_height()) // 2))
 
+        # Hiển thị điểm số nếu có
+        if previous_score is not None:
+            score_text = font.render(f"Score: {previous_score}", True, (0, 0, 0))
+            screen.blit(score_text, (SCREEN_WIDTH / 2 - score_text.get_width() / 2, SCREEN_HEIGHT / 2 - 75))
+
         pygame.display.flip()
+
+
+
 
 def  play_online_io(name):
     global players
@@ -332,16 +359,16 @@ def  play_online_io(name):
 
         data = ""
         # Update direction based on key presses
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+        if keys[pygame.K_LEFT]:
             dx, dy = -vel, 0
 
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+        if keys[pygame.K_RIGHT]:
             dx, dy = vel, 0
 
-        if keys[pygame.K_UP] or keys[pygame.K_w]:
+        if keys[pygame.K_UP]:
             dx, dy = 0, -vel
 
-        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+        if keys[pygame.K_DOWN]:
             dx, dy = 0, vel
 
         # Update player position based on direction
