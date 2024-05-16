@@ -1,9 +1,9 @@
 import socket
-class Network:
+class Network_Online:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server = "192.168.1.68"
-        self.port = 5557
+        self.server = "192.168.1.228"
+        self.port = 8000
         self.addr = (self.server, self.port)
         self.data = self.connect()
         
