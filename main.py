@@ -261,7 +261,8 @@ fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATI
 
 title_game = Button(SCREEN_WIDTH // 2 - 220, SCREEN_HEIGHT // 15, title)
 start_button = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 3, start_img)
-exit_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2, exit_img)
+start_button_online = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 2, start_img)
+exit_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 1.5, exit_img)
 restart_button = Button(SCREEN_WIDTH // 2 - 165, SCREEN_HEIGHT // 2 - 50, restart_img)
 main_menu_button = Button(SCREEN_WIDTH // 2 + 65, SCREEN_HEIGHT // 2 - 50, main_menu_img)
 
@@ -279,6 +280,9 @@ while run:
         if start_button.draw():
             map_menu = True
             main_menu = False
+        if start_button_online.draw():
+            main_menu = False
+            # play_online()
         if exit_button.draw():
             run = False
     elif map_menu:
