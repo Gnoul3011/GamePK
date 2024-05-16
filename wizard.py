@@ -1,7 +1,7 @@
 import pygame
 import random
 
-class Fighter():
+class Wizard():
     def __init__(self, player, x, y, flip, data, sprite_sheet, animation_steps, sound):
         self.reset(player, x, y, flip, data, sprite_sheet, animation_steps, sound)
         
@@ -179,9 +179,9 @@ class Fighter():
             #execute attack
             self.attacking = True
             self.attack_sound.play()
-            attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height) #vung danh
+            attacking_rect = pygame.Rect(self.rect.centerx - (4 * self.rect.width * self.flip), self.rect.y, 4 * self.rect.width, self.rect.height) #vung danh
             if attacking_rect.colliderect(target.rect):
-                target.health -= 10
+                target.health -= 12
                 self.mana += 20
                 target.hit = True
             # pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
