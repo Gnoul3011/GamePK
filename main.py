@@ -133,6 +133,20 @@ def draw_text(text, font, text_col, x, y):
 #function for drawing background
 def draw_bg(scaler_bg):
     screen.blit(scaler_bg,(0, 0))
+
+# Hàm vẽ map select
+def draw_map(map_list):
+    for i, map_image in enumerate(map_list):
+        x = 150 + (i % 3) * 250
+        y = 100 + (i // 3) * 180
+        scaler_bg = pygame.transform.scale(map_image, (200, 120))
+        screen.blit(scaler_bg, (x, y))
+        if map_selected_index == i:  # Vẽ border cho map được chọn
+            pygame.draw.rect(screen, (255, 255, 0), (x - 5, y - 5, 210, 130), 3)
+
+# Hàm vẽ nền cho map được chọn
+def draw_map_select(map_image):
+    draw_bg(pygame.transform.scale(map_image, (SCREEN_WIDTH, SCREEN_HEIGHT)))
     
 # Hàm vẽ thanh máu và mana
 def draw_health_bar(health, x, y):
@@ -266,7 +280,14 @@ while run:
             main_menu = False
         if exit_button.draw():
             run = False
-
+    elif map_menu:
+        draw_text("Choose your map", count_font, WHITE,SCREEN_WIDTH // 2 - 180, SCREEN_HEIGHT // 15)
+        draw_map([bg_image, bg_image1, bg_image2, bg_image3, bg_image4, bg_image5])  # Thêm 3 bản đồ mới
+        # Thêm phần xử lý khi map được chọn
+        if map_selected_index is not None:
+            map_selected = True
+            map_menu = False
+            character_selection=True 
     elif character_selection:
         selected_character_p1 = character_selection_screen()
         if selected_character_p1 == "exit":
