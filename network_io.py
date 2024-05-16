@@ -6,8 +6,8 @@ class Network_IO:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         #self.client.settimeout(10.0)
-        self.host = "192.168.1.228"
-        self.port = 8080
+        self.host = "192.168.1.7"
+        self.port = 5555
         self.addr = (self.host, self.port)
 
     def connect(self, name):
