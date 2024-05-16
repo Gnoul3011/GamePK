@@ -48,10 +48,10 @@ https://user-images.githubusercontent.com/15172744/190894691-c52ac22d-b76c-4890-
 ## 6. Accessing the Demo Version:
 
 You can access the demo version of GamePk at the following link:
-` Link Demo`
 
-Link Latex:
-[Link Latex] (https://www.overleaf.com/project/663b040efcffc42f45765145)
+Link Demo: (https://gnoul3011.github.io/Demo-KingDom/)
+
+Link Latex: (https://www.overleaf.com/project/663b040efcffc42f45765145)
 
 ## 7. Support:
 
