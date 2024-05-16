@@ -3,9 +3,9 @@ import pygame
 import random
 from pygame import mixer
 from fighter import Fighter
-from network_online import Network
+from network_online import Network_Online
 from player import Player
-
+from network_io import Network_IO
 mixer.init()
 pygame.init()
 
@@ -24,7 +24,25 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
+#Khai báo biến Kingdom.IO-------------------------------------------------------
+#Constant
+PLAYER_RADIUS = 10
+START_VEL = 9
+BALL_RADIUS = 5
 
+#Font
+NAME_FONT = pygame.font.SysFont("comicsans", 20)
+TIME_FONT = pygame.font.SysFont("comicsans", 30)
+SCORE_FONT = pygame.font.SysFont("comicsans", 26)
+
+#Color
+COLORS = [(255, 0, 0), (255, 128, 0), (255, 255, 0), (128, 255, 0), (0, 255, 0),
+          (0, 255, 128), (0, 255, 255), (0, 128, 255), (0, 0, 255), (0, 0, 255),
+          (128, 0, 255), (255, 0, 255), (255, 0, 128), (128, 128, 128), (0, 0, 0)]
+#-------------------------------------------------------------------------------
+# Dynamic Variables
+players = {}
+balls = []
 # Biến đếm và cập nhật countdown
 intro_count = 3 
 last_count_update = pygame.time.get_ticks()
@@ -151,7 +169,7 @@ def redrawWindow(win, player, player2):
 #Kết nối server chơi online
 def play_online():
     run = True
-    n = Network()
+    n = Network_Online()
     startPos = read_pos(n.getData())
     p = Player(startPos[0], startPos[1], 100, 100, (0, 255, 0), 1, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
     p.health = startPos[2]
@@ -188,8 +206,173 @@ def play_online():
 
         p.update()
         redrawWindow(screen, p, p2)
-        
-        
+
+
+    
+#Kết nối chơi Kingdom.IO
+def convert_time(t):
+    if type(t) == str:
+        return t
+
+    if int(t) < 60:
+        return str(t) + "s"
+    else:
+        minutes = str(t // 60)
+        seconds = str(t % 60)
+
+        if int(seconds) < 10:
+            seconds = "0" + seconds
+
+        return minutes + ":" + seconds
+    
+def redraw_window_io(players, balls, game_time, score):
+    screen.fill((255, 255, 255))  # fill screen white, to clear old frames
+    
+    # draw all the orbs/balls
+    for ball in balls:
+        pygame.draw.circle(screen, ball[2], (ball[0], ball[1]), BALL_RADIUS)
+
+    # draw each player in the list
+    for player in sorted(players, key=lambda x: players[x]["score"]):
+        p = players[player]
+        pygame.draw.circle(screen, p["color"], (p["x"], p["y"]), PLAYER_RADIUS + round(p["score"]))
+        # render and draw name for each player
+        text = NAME_FONT.render(p["name"], 1, (0, 0, 0))
+        screen.blit(text, (p["x"] - text.get_width() / 2, p["y"] - text.get_height() / 2))
+
+    # draw scoreboard
+    sort_players = list(reversed(sorted(players, key=lambda x: players[x]["score"])))
+    title = TIME_FONT.render("Scoreboard", 1, (0, 0, 0))
+    start_y = 25
+    x = SCREEN_WIDTH - title.get_width() - 10
+    screen.blit(title, (x, 5))
+
+    ran = min(len(players), 3)
+    for count, i in enumerate(sort_players[:ran]):
+        text = SCORE_FONT.render(str(count + 1) + ". " + str(players[i]["name"]), 1, (0, 0, 0))
+        screen.blit(text, (x, start_y + count * 20))
+
+    # draw time
+    text = TIME_FONT.render("Time: " + convert_time(game_time), 1, (0, 0, 0))
+    screen.blit(text, (10, 10))
+    # draw score
+    text = TIME_FONT.render("Score: " + str(round(score)), 1, (0, 0, 0))
+    screen.blit(text, (10, 15 + text.get_height()))
+    
+def draw_name_input():
+    input_box = pygame.Rect(SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 - 25, 200, 50)
+    font = pygame.font.SysFont("comicsans", 30)
+    color_inactive = pygame.Color('lightskyblue3')
+    color_active = pygame.Color('dodgerblue2')
+    color = color_inactive
+    active = False
+    text = ''
+    done = False
+    play_button = pygame.Rect(SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 50, 100, 50)
+    
+    while not done:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if input_box.collidepoint(event.pos):
+                    active = not active
+                else:
+                    active = False
+                if play_button.collidepoint(event.pos) and 0 < len(text) < 20:
+                    return text
+                color = color_active if active else color_inactive
+            if event.type == pygame.KEYDOWN:
+                if active:
+                    if event.key == pygame.K_RETURN:
+                        if 0 < len(text) < 20:
+                            return text
+                    elif event.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
+                    else:
+                        text += event.unicode
+
+        screen.fill((255, 255, 255))
+        txt_surface = font.render(text, True, color)
+        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        pygame.draw.rect(screen, color, input_box, 2)
+
+        play_text = font.render("Play", True, (0, 0, 0))
+        pygame.draw.rect(screen, (0, 255, 0), play_button)
+        screen.blit(play_text, (play_button.x + (play_button.width - play_text.get_width()) // 2,
+                            play_button.y + (play_button.height - play_text.get_height()) // 2))
+
+        pygame.display.flip()
+
+def  play_online_io(name):
+    global players
+    # start by connecting to the network
+    server = Network_IO()
+    current_id = server.connect(name)
+    balls, players, game_time = server.send("get")
+
+    # setup the clock, limit to 30fps
+    clock = pygame.time.Clock()
+
+    run = True
+
+    # Initialize movement direction
+    dx, dy = START_VEL, 0
+
+    while run:
+        clock.tick(30)  # 30 fps max
+        player = players[current_id]
+        vel = START_VEL - round(player["score"] / 14)
+        if vel <= 1:
+            vel = 1
+
+        # get key presses
+        keys = pygame.key.get_pressed()
+
+        data = ""
+        # Update direction based on key presses
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            dx, dy = -vel, 0
+
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            dx, dy = vel, 0
+
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
+            dx, dy = 0, -vel
+
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            dx, dy = 0, vel
+
+        # Update player position based on direction
+        if 0 <= player["x"] + dx <= SCREEN_WIDTH:
+            player["x"] += dx
+        if 0 <= player["y"] + dy <= SCREEN_HEIGHT:
+            player["y"] += dy
+
+        data = "move " + str(player["x"]) + " " + str(player["y"])
+
+        # send data to server and receive back all players information
+        balls, players, game_time = server.send(data)
+
+        for event in pygame.event.get():
+            # if user hits red x button close window
+            if event.type == pygame.QUIT:
+                run = False
+
+            if event.type == pygame.KEYDOWN:
+                # if user hits a escape key close program
+                if event.key == pygame.K_ESCAPE:
+                    run = False
+
+        # redraw window then update the frame
+        redraw_window_io(players, balls, game_time, player["score"])
+        pygame.display.update()
+
+    server.disconnect()
+    pygame.quit()
+    quit()
+   
 # Hàm vẽ chữ
 def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
@@ -325,8 +508,9 @@ fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANI
 fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
 
 title_game = Button(SCREEN_WIDTH // 2 - 220, SCREEN_HEIGHT // 15, title)
-start_button = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 3, start_img)
-start_button_online = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 2, start_img)
+start_button = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 4, start_img)
+start_button_online = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 2.5, start_img)
+start_button_io = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 1.85, start_img)
 exit_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 1.5, exit_img)
 restart_button = Button(SCREEN_WIDTH // 2 - 165, SCREEN_HEIGHT // 2 - 50, restart_img)
 main_menu_button = Button(SCREEN_WIDTH // 2 + 65, SCREEN_HEIGHT // 2 - 50, main_menu_img)
@@ -348,6 +532,10 @@ while run:
         if start_button_online.draw():
             main_menu = False
             play_online()
+        if start_button_io.draw():
+            main_menu = False
+            name = draw_name_input()
+            play_online_io(name)
         if exit_button.draw():
             run = False
     elif map_menu:
