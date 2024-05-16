@@ -1,6 +1,10 @@
+import json
 import pygame
+import random
 from pygame import mixer
 from fighter import Fighter
+from network_online import Network
+from player import Player
 
 mixer.init()
 pygame.init()
@@ -125,6 +129,67 @@ KNIGHT_ANIMATION_STEPS = [11, 8, 3, 7, 7, 4, 11]
 count_font = pygame.font.Font("assets/fonts/turok.ttf", 50)
 score_font = pygame.font.Font("assets/fonts/turok.ttf", 30)
 
+
+def read_pos(str):
+    str = str.split(",")
+    return int(str[0]), int(str[1]), int(str[2]), int(str[3]), int(str[4]), int(str[5])
+    
+def make_pos(tup):
+    return str(tup[0]) + "," + str(tup[1]) + "," + str(tup[2]) + "," + str(tup[3]) + "," + str(tup[4])+ "," + str(tup[5])
+
+# Hàm vẽ giao diện chơi online
+def redrawWindow(win, player, player2):
+    win.fill((255, 255, 255))
+    draw_bg(pygame.transform.scale(bg_image1, (SCREEN_WIDTH, SCREEN_HEIGHT)))
+    player.draw(win)
+    player2.draw(win)
+    player.draw_health_bar(win,20,20)
+    player.draw_mana_bar(win,20,55)
+    player2.draw_health_bar(win,580,20)
+    player2.draw_mana_bar(win,580,55)
+    pygame.display.update()
+#Kết nối server chơi online
+def play_online():
+    run = True
+    n = Network()
+    startPos = read_pos(n.getData())
+    p = Player(startPos[0], startPos[1], 100, 100, (0, 255, 0), 1, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
+    p.health = startPos[2]
+    p2 = Player(0, 0, 100, 100, (255, 0, 0), 2, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
+    clock = pygame.time.Clock()
+    intro_count = 3 
+    last_count_update = pygame.time.get_ticks()
+
+    while run:
+        clock.tick(60)
+        # Nhận dữ liệu từ mạng
+        p2Pos = read_pos(n.send(make_pos((p.x, p.y, p.health, p.mana, p.action, p.frame_index))))
+        p2.x = p2Pos[0]
+        p2.y = p2Pos[1]
+        p2.health = p2Pos[2]
+        p2.mana = p2Pos[3]
+        p2.action = p2Pos[4]
+        p2.frame_index = p2Pos[5]
+       
+        p2.update()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+
+        if intro_count <= 0:
+            p.move(SCREEN_WIDTH, SCREEN_HEIGHT, p2, False)
+        else:
+            draw_text(str(intro_count), count_font, RED, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 50)
+            if (pygame.time.get_ticks() - last_count_update) >= 1000:
+                intro_count -= 1
+                last_count_update = pygame.time.get_ticks()
+
+        p.update()
+        redrawWindow(screen, p, p2)
+        
+        
 # Hàm vẽ chữ
 def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
@@ -282,7 +347,7 @@ while run:
             main_menu = False
         if start_button_online.draw():
             main_menu = False
-            # play_online()
+            play_online()
         if exit_button.draw():
             run = False
     elif map_menu:
