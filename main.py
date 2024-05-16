@@ -89,6 +89,14 @@ choose_character_3 = pygame.transform.scale(choose_character_3, (200, 200))
 choose_character_4 = pygame.image.load("assets/images/background/character4.png").convert_alpha()
 choose_character_4 = pygame.transform.scale(choose_character_4, (250, 250))  
 
+#Map image
+bg_image = pygame.image.load("assets/images/background/background.jpg").convert_alpha()
+bg_image1 = pygame.image.load("assets/images/background/background1.jpg").convert_alpha()
+bg_image2 = pygame.image.load("assets/images/background/background8.jpg").convert_alpha()
+bg_image3 = pygame.image.load("assets/images/background/background7.jpg").convert_alpha()
+bg_image4 = pygame.image.load("assets/images/background/background4.jpg").convert_alpha()
+bg_image5 = pygame.image.load("assets/images/background/background6.jpg").convert_alpha() 
+
 bg_image = pygame.image.load("assets/images/background/background.jpg").convert_alpha()
 start_img = pygame.image.load('assets/images/background/start.png').convert_alpha()
 exit_img = pygame.image.load('assets/images/background/exit.png').convert_alpha()
