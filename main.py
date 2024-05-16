@@ -65,8 +65,8 @@ magic_fx = pygame.mixer.Sound("assets/audio/magic.wav")
 magic_fx.set_volume(0.75)
 knight_fx = pygame.mixer.Sound("assets/audio/knight.mp3")
 knight_fx.set_volume(0.75)
-KO_fx = pygame.mixer.Sound("assets/audio/ko.mp3")
-KO_fx.set_volume(0.5)
+# KO_fx = pygame.mixer.Sound("assets/audio/ko.mp3")
+# KO_fx.set_volume(0.5)
 P1_win_fx = pygame.mixer.Sound("assets/audio/player-1-wins.mp3")
 P1_win_fx.set_volume(0.25)
 P2_win_fx = pygame.mixer.Sound("assets/audio/player-2-wins.mp3")
@@ -120,7 +120,7 @@ P2Victory_img = pygame.image.load("assets/images/icons/p2win.png").convert_alpha
 K_O_img = pygame.image.load("assets/images/icons/K.O.png").convert_alpha()
 
 #define number of steps in each animation
-WARRIOR_ANIMATION_STEPS = [10, 8, 1, 7, 7, 3, 7]
+WARRIOR_ANIMATION_STEPS = [10, 8, 1, 7, 7, 3, 7, 8]
 WIZARD_ANIMATION_STEPS = [8, 8, 1, 8, 8, 3, 7]
 MARTIALHERO_ANIMATION_STEPS = [8, 8, 2, 6, 6, 4, 6]
 KNIGHT_ANIMATION_STEPS = [11, 8, 3, 7, 7, 4, 11]  

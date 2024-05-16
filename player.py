@@ -75,11 +75,11 @@ class Player():
             if key[pygame.K_RIGHT]:
                 dx = SPEED
                 self.running = True    
-            if key[pygame.K_KP1] or key[pygame.K_KP2]:
+            if key[pygame.K_r] or key[pygame.K_t]:
                 self.attack(target)
-                if key[pygame.K_KP1]:
+                if key[pygame.K_r]:
                     self.attack_type = 1
-                if key[pygame.K_KP2]:
+                if key[pygame.K_t]:
                     self.attack_type = 2
                     
         self.vel_y += GRAVITY
