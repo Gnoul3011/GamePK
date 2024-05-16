@@ -318,7 +318,10 @@ while run:
                 
 
         character_selection = False     
-    
+    elif not map_menu and not main_menu and not character_selection:
+        # Lấy hình ảnh của map được chọn
+        map_image = [bg_image, bg_image1, bg_image2, bg_image3, bg_image4, bg_image5][map_selected_index]
+        draw_map_select(map_image) 
         #show player status
         draw_health_bar(fighter_1.health, 20, 20)
         draw_text("HP: " + str(fighter_1.health), score_font, WHITE, 180, 15)
@@ -423,7 +426,17 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
                 run = False
-                
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if map_menu:
+                # Lấy vị trí của chuột khi click
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                # Kiểm tra xem chuột có nằm trong vùng của map không
+                for i, map_image in enumerate([bg_image, bg_image1, bg_image2, bg_image3, bg_image4, bg_image5]):
+                    map_area = pygame.Rect(150 + (i % 3) * 250, 100 + (i // 3) * 180, 200, 120)  # Cập nhật vùng cho 6 map
+                    if map_area.collidepoint(mouse_x, mouse_y):
+                        # Lưu chỉ số của map được chọn
+                        map_selected_index = i
+                        break
     #update display
     pygame.display.update()
                 
