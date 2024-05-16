@@ -219,7 +219,7 @@ class Fighter():
         self.attack_cooldown = 0
         self.attack_sound = sound
         self.hit = False
-        self.health = 100
+        self.health = 10
         self.mana = 0
         self.max_mana = 100
         self.alive = True

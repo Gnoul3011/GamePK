@@ -77,14 +77,21 @@ KNIGHT_DATA = [KNIGHT_SIZE, KNIGHT_SCALE, KNIGHT_OFFSET]
 pygame.mixer.music.load("assets/audio/music1.mp3")
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1, 0.0, 5000)
-sword_fx = pygame.mixer.Sound("assets/audio/sword.wav")
+
+sword_fx = pygame.mixer.Sound("assets/audio/warrior.mp3")
 sword_fx.set_volume(0.5)
+
 magic_fx = pygame.mixer.Sound("assets/audio/magic.wav")
 magic_fx.set_volume(0.75)
+
 knight_fx = pygame.mixer.Sound("assets/audio/knight.mp3")
 knight_fx.set_volume(0.75)
-# KO_fx = pygame.mixer.Sound("assets/audio/ko.mp3")
-# KO_fx.set_volume(0.5)
+
+hero_fx = pygame.mixer.Sound("assets/audio/hero.wav")
+hero_fx.set_volume(0.75)
+
+KO_fx = pygame.mixer.Sound("assets/audio/ko.mp3")
+KO_fx.set_volume(0.5)
 P1_win_fx = pygame.mixer.Sound("assets/audio/player-1-wins.mp3")
 P1_win_fx.set_volume(0.25)
 P2_win_fx = pygame.mixer.Sound("assets/audio/player-2-wins.mp3")
@@ -559,7 +566,7 @@ while run:
             elif selected_character_p1 == "Wizard":
                 fighter_1 = Fighter(1, 200, 310, False, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
             elif selected_character_p1 == "Hero":
-                fighter_1 = Fighter(1, 200, 310, False, MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, sword_fx)
+                fighter_1 = Fighter(1, 200, 310, False, MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, hero_fx)
             elif selected_character_p1 == "Knight":
                 fighter_1 = Fighter(1, 200, 310, False, KNIGHT_DATA, knight_sheet, KNIGHT_ANIMATION_STEPS, knight_fx)
 
@@ -573,7 +580,7 @@ while run:
             elif selected_character_p2 == "Wizard":
                 fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
             elif selected_character_p2 == "Hero":
-                fighter_2 = Fighter(2, 700, 310, True   , MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, sword_fx)
+                fighter_2 = Fighter(2, 700, 310, True   , MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, hero_fx)
             elif selected_character_p2 == "Knight":
                 fighter_2 = Fighter(2, 700, 310, True, KNIGHT_DATA, knight_sheet, KNIGHT_ANIMATION_STEPS, knight_fx)
                 
@@ -628,22 +635,47 @@ while run:
                 round_over_time = pygame.time.get_ticks()
         elif score[0] == WINNING_SCORE:
             screen.blit(P1Victory_img, (360, 150))
-            round_over = True
-            if restart_button.draw():
-                fighter_1.reset(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
-                fighter_2.reset(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
-                score = [0, 0]
-                round_over = False
-        elif score[1] == WINNING_SCORE:
-            screen.blit(P2Victory_img, (360, 150))     
-            round_over = True
+            if not sound_played:
+                P1_win_fx.play()
+                sound_played = True
             if restart_button.draw():
                 if selected_character_p1 == "Warrior":
                     fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
                 elif selected_character_p1 == "Wizard":
                     fighter_1 = Fighter(1, 200, 310, False, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
                 elif selected_character_p1 == "Hero":
-                    fighter_1 = Fighter(1, 200, 310, False, MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, sword_fx)
+                    fighter_1 = Fighter(1, 200, 310, False, MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, hero_fx)
+                elif selected_character_p1 == "Knight":
+                    fighter_1 = Fighter(1, 200, 310, False, KNIGHT_DATA, knight_sheet, KNIGHT_ANIMATION_STEPS, knight_fx)
+
+                if selected_character_p2 == "Warrior":
+                    fighter_2 = Fighter(2, 700, 310, True, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
+                elif selected_character_p2 == "Wizard":
+                    fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
+                elif selected_character_p2 == "Hero":
+                    fighter_2 = Fighter(2, 700, 310, True   , MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, hero_fx)
+                elif selected_character_p2 == "Knight":
+                    fighter_2 = Fighter(2, 700, 310, True, KNIGHT_DATA, knight_sheet, KNIGHT_ANIMATION_STEPS, knight_fx)
+                score = [0, 0]
+                round_over = False
+            if main_menu_button.draw():
+                map_menu = True
+                score = [0, 0]
+                round_over = False
+                intro_count = 3 # thoi gian dem nguoc
+                
+        elif score[1] == WINNING_SCORE:
+            screen.blit(P2Victory_img, (360, 150))  
+            if not sound_played:
+                P2_win_fx.play()   
+                sound_played = True
+            if restart_button.draw():
+                if selected_character_p1 == "Warrior":
+                    fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_STEPS, sword_fx)
+                elif selected_character_p1 == "Wizard":
+                    fighter_1 = Fighter(1, 200, 310, False, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
+                elif selected_character_p1 == "Hero":
+                    fighter_1 = Fighter(1, 200, 310, False, MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, hero_fx)
                 elif selected_character_p1 == "Knight":
                     fighter_1 = Fighter(1, 200, 310, False, KNIGHT_DATA, knight_sheet, KNIGHT_ANIMATION_STEPS, knight_fx)
                 if selected_character_p2 == "Warrior":
@@ -651,18 +683,20 @@ while run:
                 elif selected_character_p2 == "Wizard":
                     fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
                 elif selected_character_p2 == "Hero":
-                    fighter_2 = Fighter(2, 700, 310, True   , MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, sword_fx)
+                    fighter_2 = Fighter(2, 700, 310, True   , MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, hero_fx)
                 elif selected_character_p2 == "Knight":
                     fighter_2 = Fighter(2, 700, 310, True, KNIGHT_DATA, knight_sheet, KNIGHT_ANIMATION_STEPS, knight_fx)  
                 score = [0, 0]
                 round_over = False
             if main_menu_button.draw():
-                main_menu = True
+                map_menu = True
                 score = [0, 0]
                 round_over = False
+                intro_count = 3 # thoi gian dem nguoc
         else:
             #display victory image
-            # screen.blit(victory_img, (360, 150))
+            screen.blit(K_O_img, (360, 150))
+            KO_fx.play()
             if pygame.time.get_ticks() - round_over_time >ROUND_OVER_COOLDOWN:
                 round_over = False
                 intro_count = 3
@@ -671,7 +705,7 @@ while run:
                 elif selected_character_p1 == "Wizard":
                     fighter_1 = Fighter(1, 200, 310, False, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
                 elif selected_character_p1 == "Hero":
-                    fighter_1 = Fighter(1, 200, 310, False, MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, sword_fx)
+                    fighter_1 = Fighter(1, 200, 310, False, MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, hero_fx)
                 elif selected_character_p1 == "Knight":
                     fighter_1 = Fighter(1, 200, 310, False, KNIGHT_DATA, knight_sheet, KNIGHT_ANIMATION_STEPS, knight_fx)
                 if selected_character_p2 == "Warrior":
@@ -679,7 +713,7 @@ while run:
                 elif selected_character_p2 == "Wizard":
                     fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
                 elif selected_character_p2 == "Hero":
-                    fighter_2 = Fighter(2, 700, 310, True   , MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, sword_fx)
+                    fighter_2 = Fighter(2, 700, 310, True   , MARTIALHERO_DATA, martialhero_sheet, MARTIALHERO_ANIMATION_STEPS, hero_fx)
                 elif selected_character_p2 == "Knight":
                     fighter_2 = Fighter(2, 700, 310, True, KNIGHT_DATA, knight_sheet, KNIGHT_ANIMATION_STEPS, knight_fx)
 
