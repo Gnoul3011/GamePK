@@ -277,6 +277,7 @@ while run:
     if main_menu:
         title_game.draw()
         if start_button.draw():
+            map_menu = True
             main_menu = False
         if exit_button.draw():
             run = False
