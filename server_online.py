@@ -3,8 +3,8 @@ import socket
 from _thread import *
 import sys
 
-server = "192.168.1.228"
-port = 8000
+server = "192.168.1.68"
+port = 5557
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 

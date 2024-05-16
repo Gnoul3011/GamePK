@@ -404,7 +404,7 @@ while run:
         
         #update countdown
         if intro_count <= 0:
-            #move fighters
+            #move fightzzers
             fighter_1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_2, round_over)
             fighter_2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter_1, round_over)
         else:
