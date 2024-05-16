@@ -121,6 +121,9 @@ bg_image5 = pygame.image.load("assets/images/background/background6.jpg").conver
 
 bg_image = pygame.image.load("assets/images/background/background.jpg").convert_alpha()
 start_img = pygame.image.load('assets/images/background/start.png').convert_alpha()
+play_offline_img = pygame.image.load('assets/images/background/play_offline.png').convert_alpha()
+play_online_img = pygame.image.load('assets/images/background/play_online.png').convert_alpha()
+kingdom_io_img = pygame.image.load('assets/images/background/kingdom_io.png').convert_alpha()
 exit_img = pygame.image.load('assets/images/background/exit.png').convert_alpha()
 restart_img = pygame.image.load('assets/images/background/restart.png').convert_alpha()
 main_menu_img = pygame.image.load('assets/images/background/main_menu.png').convert_alpha()
@@ -508,9 +511,9 @@ fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANI
 fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_STEPS, magic_fx)
 
 title_game = Button(SCREEN_WIDTH // 2 - 220, SCREEN_HEIGHT // 15, title)
-start_button = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 4, start_img)
-start_button_online = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 2.5, start_img)
-start_button_io = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 1.85, start_img)
+start_button = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 4, play_offline_img)
+start_button_online = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 2.5, play_online_img)
+start_button_io = Button(SCREEN_WIDTH // 2 - 145, SCREEN_HEIGHT // 1.85, kingdom_io_img)
 exit_button = Button(SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 1.5, exit_img)
 restart_button = Button(SCREEN_WIDTH // 2 - 165, SCREEN_HEIGHT // 2 - 50, restart_img)
 main_menu_button = Button(SCREEN_WIDTH // 2 + 65, SCREEN_HEIGHT // 2 - 50, main_menu_img)
