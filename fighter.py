@@ -168,7 +168,7 @@ class Fighter():
             self.attack_sound.play()
             attacking_rect = pygame.Rect(self.rect.centerx - (4 * self.rect.width * self.flip), self.rect.y, 4 * self.rect.width, self.rect.height) #vung danh
             if attacking_rect.colliderect(target.rect):
-                target.health -= 70
+                target.health -= 50
                 self.mana -= 100
                 target.hit = True
             # pygame.draw.rect(surface, (0, 255, 0), attacking_rect)
@@ -179,7 +179,7 @@ class Fighter():
             #execute attack
             self.attacking = True
             self.attack_sound.play()
-            attacking_rect = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height) #vung danh
+            attacking_rect = pygame.Rect(self.rect.centerx - (3 * self.rect.width * self.flip), self.rect.y, 3 * self.rect.width, self.rect.height) #vung danh
             if attacking_rect.colliderect(target.rect):
                 target.health -= 10
                 self.mana += 20
@@ -219,7 +219,7 @@ class Fighter():
         self.attack_cooldown = 0
         self.attack_sound = sound
         self.hit = False
-        self.health = 10
+        self.health = 100
         self.mana = 0
         self.max_mana = 100
         self.alive = True
